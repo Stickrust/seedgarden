@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#faf8f4">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Seed Garden">
+<title>Seed Garden</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Lora:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf8f4;
+    --surface: #ffffff;
+    --border: #e5e2db;
+    --border-dark: #ccc9c1;
+    --text: #1a1917;
+    --muted: #9a9690;
+    --faint: #f0ede6;
+    --sans: 'DM Sans', sans-serif;
+    --mono: 'DM Mono', monospace;
+    --serif: 'Lora', Georgia, serif;
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --max-w: 640px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { height: 100%; }
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100%;
+    padding-bottom: calc(var(--safe-bottom) + 2rem);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Auth screen ── */
+  #auth-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+    text-align: center;
+  }
+  .auth-title { font-family: var(--serif); font-size: 32px; font-weight: 400; color: var(--text); margin-bottom: 8px; letter-spacing: -0.02em; }
+  .auth-sub { font-size: 14px; color: var(--muted); margin-bottom: 40px; }
+  .btn-google {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 12px 24px;
+    border-radius: 10px;
+    border: 1px solid var(--border-dark);
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    transition: border-color 0.15s, opacity 0.15s;
+  }
+  .btn-google:hover { border-color: var(--text); }
+  .btn-google svg { flex-shrink: 0; }
+  .auth-note { font-family: var(--mono); font-size: 11px; color: var(--border-dark); margin-top: 20px; }
+
+  /* ── App shell ── */
+  #app-screen { display: none; }
+  .page { max-width: var(--max-w); margin: 0 auto; padding: 0 16px; }
+
+  /* ── Header ── */
+  .app-header {
+    padding: calc(var(--safe-top) + 20px) 16px 0;
+    max-width: var(--max-w);
+    margin: 0 auto 20px;
+  }
+  .header-top { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 4px; }
+  .app-title { font-family: var(--serif); font-size: 24px; font-weight: 400; color: var(--text); letter-spacing: -0.01em; }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .header-meta { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  .btn-signout { font-family: var(--mono); font-size: 11px; color: var(--muted); background: none; border: none; cursor: pointer; padding: 0; transition: color 0.15s; }
+  .btn-signout:hover { color: var(--text); }
+  .header-rule { border: none; border-top: 1px solid var(--border); margin-top: 14px; }
+
+  /* ── Loading state ── */
+  #loading-screen {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh; font-family: var(--mono); font-size: 12px; color: var(--muted);
+  }
+
+  /* ── Add form ── */
+  .add-form { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 18px; }
+  .add-form input[type="text"] { width: 100%; font-family: var(--sans); font-size: 15px; font-weight: 500; color: var(--text); background: transparent; border: none; outline: none; padding: 0; margin-bottom: 8px; display: block; }
+  .add-form input[type="text"]::placeholder { color: var(--border-dark); font-weight: 400; }
+  .add-form textarea { width: 100%; font-family: var(--sans); font-size: 13px; color: var(--muted); background: transparent; border: none; outline: none; resize: none; padding: 0; line-height: 1.6; min-height: 0; max-height: 120px; overflow: hidden; display: block; transition: min-height 0.2s; }
+  .add-form textarea::placeholder { color: #d0cdc6; }
+  .add-form textarea.has-title { min-height: 44px; }
+  .form-divider { border: none; border-top: 1px solid var(--border); margin: 10px 0; }
+  .form-bottom { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .cat-pills { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; }
+  .cat-pill { font-family: var(--sans); font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+  .cat-pill.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .cat-pill:hover:not(.active) { border-color: var(--border-dark); color: var(--text); }
+  .custom-cat { font-family: var(--sans); font-size: 12px; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--text); outline: none; width: 110px; }
+  .custom-cat::placeholder { color: var(--border-dark); }
+  .btn-save { font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 7px 16px; border-radius: 8px; border: 1px solid var(--text); background: var(--text); color: var(--bg); cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: opacity 0.15s; }
+  .btn-save:hover { opacity: 0.75; }
+
+  /* ── Toolbar ── */
+  .toolbar { display: flex; align-items: center; gap: 7px; margin-bottom: 14px; flex-wrap: wrap; }
+  .filter-pill { font-family: var(--sans); font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+  .filter-pill.active { background: var(--faint); color: var(--text); border-color: var(--border-dark); }
+  .filter-pill:hover:not(.active) { border-color: var(--border-dark); }
+  .tb-right { margin-left: auto; display: flex; gap: 7px; align-items: center; flex-wrap: wrap; }
+  .search-input { font-family: var(--sans); font-size: 12px; padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--text); outline: none; width: 120px; }
+  .search-input::placeholder { color: var(--border-dark); }
+  .btn-sm { font-family: var(--sans); font-size: 12px; font-weight: 500; padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; white-space: nowrap; transition: all 0.15s; }
+  .btn-sm:hover { border-color: var(--border-dark); color: var(--text); }
+  .btn-sm.active-mode { border-color: var(--text); color: var(--text); }
+
+  /* ── Selection bar ── */
+  .sel-bar { display: flex; align-items: center; gap: 8px; background: var(--faint); border: 1px solid var(--border-dark); border-radius: 10px; padding: 9px 14px; margin-bottom: 12px; flex-wrap: wrap; }
+  .sel-bar-label { font-size: 13px; font-weight: 500; color: var(--text); flex: 1; }
+  .btn-sel { font-family: var(--sans); font-size: 12px; font-weight: 500; padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border-dark); background: transparent; color: var(--muted); cursor: pointer; white-space: nowrap; transition: all 0.15s; }
+  .btn-sel:hover { color: var(--text); border-color: var(--text); }
+  .btn-dl { font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 6px 16px; border-radius: 8px; border: 1px solid var(--text); background: var(--text); color: var(--bg); cursor: pointer; white-space: nowrap; transition: opacity 0.15s; }
+  .btn-dl:hover { opacity: 0.75; }
+  .btn-dl:disabled { opacity: 0.3; cursor: default; }
+
+  /* ── Cards ── */
+  .ideas { display: flex; flex-direction: column; gap: 8px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; transition: border-color 0.15s; display: flex; gap: 10px; align-items: flex-start; }
+  .card:hover { border-color: var(--border-dark); }
+  .card.selected { border-color: var(--border-dark); background: #f7f5f0; }
+  .card.editing { border-color: var(--border-dark); }
+  .card-check { margin-top: 3px; flex-shrink: 0; width: 16px; height: 16px; accent-color: var(--text); cursor: pointer; }
+  .card-body { flex: 1; min-width: 0; }
+  .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+  .card-title { font-size: 16px; font-weight: 500; color: var(--text); flex: 1; line-height: 1.4; }
+  .tag { font-family: var(--mono); font-size: 10px; padding: 2px 8px; border-radius: 20px; background: var(--faint); color: var(--muted); white-space: nowrap; border: 1px solid var(--border); flex-shrink: 0; }
+  .card-notes { font-size: 13px; color: var(--muted); margin-top: 5px; line-height: 1.6; }
+  .card-foot { display: flex; align-items: center; margin-top: 8px; gap: 8px; }
+  .card-date { font-family: var(--mono); font-size: 10px; color: #c8c4bc; }
+  .btn-edit { font-family: var(--sans); font-size: 13px; font-weight: 500; color: var(--muted); background: none; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; padding: 4px 10px; margin-left: auto; transition: color 0.15s, border-color 0.15s; }
+  .btn-edit:hover { border-color: var(--border-dark); color: var(--text); }
+  .btn-del { font-family: var(--sans); font-size: 13px; font-weight: 500; color: #c8c4bc; background: none; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; padding: 4px 10px; transition: color 0.15s, border-color 0.15s; }
+  .btn-del:hover { color: #c0392b; border-color: #c0392b; }
+
+  /* ── Edit card ── */
+  .edit-inp-title { width: 100%; font-family: var(--sans); font-size: 16px; font-weight: 500; color: var(--text); background: transparent; border: none; outline: none; padding: 0; margin-bottom: 6px; display: block; }
+  .edit-inp-notes { width: 100%; font-family: var(--sans); font-size: 13px; color: var(--muted); background: transparent; border: none; outline: none; resize: none; padding: 0; line-height: 1.6; display: block; min-height: 40px; }
+  .edit-div { border: none; border-top: 1px solid var(--border); margin: 10px 0; }
+  .edit-bottom { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .edit-pills { display: flex; gap: 5px; flex-wrap: wrap; flex: 1; }
+  .edit-pill { font-family: var(--sans); font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+  .edit-pill.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .edit-pill:hover:not(.active) { border-color: var(--border-dark); color: var(--text); }
+  .edit-custom { font-family: var(--sans); font-size: 12px; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--text); outline: none; width: 90px; }
+  .edit-custom::placeholder { color: var(--border-dark); }
+  .btn-update { font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 7px 16px; border-radius: 8px; border: 1px solid var(--text); background: var(--text); color: var(--bg); cursor: pointer; white-space: nowrap; transition: opacity 0.15s; }
+  .btn-update:hover { opacity: 0.75; }
+  .btn-cancel-edit { font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; transition: all 0.15s; }
+  .btn-cancel-edit:hover { border-color: var(--border-dark); color: var(--text); }
+
+  /* ── Confirm modal ── */
+  .modal-wrap { min-height: 220px; background: rgba(26,25,23,0.35); display: flex; align-items: center; justify-content: center; border-radius: 10px; margin-bottom: 8px; }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 22px; width: 100%; max-width: 320px; }
+  .modal-title { font-family: var(--serif); font-size: 17px; font-weight: 400; color: var(--text); margin-bottom: 6px; }
+  .modal-sub { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 14px; }
+  .modal-idea { font-size: 13px; font-weight: 500; color: var(--text); background: var(--faint); border-radius: 6px; padding: 7px 10px; margin-bottom: 18px; line-height: 1.4; }
+  .modal-btns { display: flex; gap: 8px; justify-content: flex-end; }
+  .btn-cancel { font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 8px 18px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; transition: all 0.15s; }
+  .btn-cancel:hover { border-color: var(--border-dark); color: var(--text); }
+  .btn-confirm { font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 8px 18px; border-radius: 8px; border: 1px solid #c0392b; background: #c0392b; color: #fff; cursor: pointer; transition: opacity 0.15s; }
+  .btn-confirm:hover { opacity: 0.8; }
+
+  /* ── Tags panel ── */
+  .tags-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 18px; }
+  .tags-panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .tags-panel-title { font-size: 13px; font-weight: 500; color: var(--text); }
+  .tags-panel-sub { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+  .tag-row { display: flex; align-items: center; gap: 8px; padding: 7px 0; border-top: 1px solid var(--border); }
+  .tag-name { font-family: var(--mono); font-size: 12px; color: var(--text); flex: 1; }
+  .tag-count { font-family: var(--mono); font-size: 11px; color: var(--muted); white-space: nowrap; }
+  .tag-rename-inp { font-family: var(--sans); font-size: 13px; color: var(--text); border: 1px solid var(--border-dark); border-radius: 6px; padding: 3px 8px; outline: none; flex: 1; background: var(--bg); }
+  .btn-tag-action { font-family: var(--sans); font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; white-space: nowrap; transition: all 0.15s; }
+  .btn-tag-action:hover { border-color: var(--border-dark); color: var(--text); }
+  .btn-tag-del { font-family: var(--sans); font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border); background: transparent; color: #c8c4bc; cursor: pointer; white-space: nowrap; transition: all 0.15s; }
+  .btn-tag-del:hover { border-color: #c0392b; color: #c0392b; }
+  .btn-tag-save { font-family: var(--sans); font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--text); background: var(--text); color: var(--bg); cursor: pointer; white-space: nowrap; }
+  .reassign-select { font-family: var(--sans); font-size: 12px; padding: 3px 8px; border-radius: 6px; border: 1px solid var(--border-dark); background: var(--bg); color: var(--text); outline: none; margin-left: 4px; }
+
+  /* ── Empty state ── */
+  .empty { text-align: center; padding: 3rem 1rem; }
+  .empty-title { font-family: var(--serif); font-size: 18px; font-weight: 400; color: var(--border-dark); margin-bottom: 8px; }
+  .empty-sub { font-family: var(--mono); font-size: 12px; color: var(--border-dark); }
+
+  /* ── Sync status ── */
+  .sync-dot { width: 6px; height: 6px; border-radius: 50%; background: #639922; display: inline-block; margin-right: 4px; }
+  .sync-dot.syncing { background: #BA7517; animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  /* ── Responsive ── */
+  @media (max-width: 480px) {
+    .app-title { font-size: 20px; }
+    .tb-right { margin-left: 0; width: 100%; }
+    .search-input { flex: 1; width: auto; }
+  }
+</style>
+</head>
+<body>
+
+<div id="loading-screen">loading...</div>
+
+<!-- Auth screen -->
+<div id="auth-screen" style="display:none;">
+  <div class="auth-title">Seed Garden</div>
+  <div class="auth-sub">Your personal idea journal</div>
+  <button class="btn-google" onclick="signIn()">
+    <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/></svg>
+    Sign in with Google
+  </button>
+  <div class="auth-note">Only you can access your garden</div>
+</div>
+
+<!-- App screen -->
+<div id="app-screen">
+  <div class="app-header">
+    <div class="header-top">
+      <h1 class="app-title">Seed Garden</h1>
+      <div class="header-right">
+        <span class="header-meta"><span class="sync-dot" id="sync-dot"></span><span id="idea-count">0 seeds</span></span>
+        <button class="btn-signout" onclick="signOut()">sign out</button>
+      </div>
+    </div>
+    <hr class="header-rule">
+  </div>
+
+  <div class="page">
+    <div class="add-form">
+      <input type="text" id="inp-title" placeholder="Plant a new idea..." autocomplete="off" />
+      <textarea id="inp-notes" placeholder="Notes, links, thoughts..." rows="1"></textarea>
+      <hr class="form-divider">
+      <div class="form-bottom">
+        <div class="cat-pills" id="cat-pills">
+          <button class="cat-pill active" data-cat="travel">travel</button>
+          <button class="cat-pill" data-cat="project">project</button>
+          <button class="cat-pill" data-cat="learning">learning</button>
+          <button class="cat-pill" data-cat="health">health</button>
+          <button class="cat-pill" data-cat="other">other</button>
+        </div>
+        <input class="custom-cat" id="inp-custom" placeholder="custom..." />
+        <button class="btn-save" onclick="addIdea()">plant it</button>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="filter-pill active" id="filter-all" onclick="setFilter(this,'all')">all</button>
+      <div id="dynamic-filters" style="display:contents;"></div>
+      <div class="tb-right">
+        <input class="search-input" id="search" placeholder="search..." oninput="render()" />
+        <button class="btn-sm" id="btn-select" onclick="toggleSelectMode()">select</button>
+        <button class="btn-sm" onclick="toggleTagPanel()">manage tags</button>
+        <button class="btn-sm" onclick="exportData()">backup ↓</button>
+      </div>
+    </div>
+
+    <div id="sel-bar-container"></div>
+    <div id="tags-panel-container"></div>
+    <div class="ideas" id="ideas-list"></div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut as fbSignOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDp5_10eIWSgnL8_vlqbJWt-eNDuOJwOZY",
+  authDomain: "seedgarden-12971.firebaseapp.com",
+  projectId: "seedgarden-12971",
+  storageBucket: "seedgarden-12971.firebasestorage.app",
+  messagingSenderId: "164399564018",
+  appId: "1:164399564018:web:58d82638bfc801aa7a7c6b"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let ideas = [];
+let unsubscribe = null;
+let activeFilter = 'all';
+let activeCat = 'travel';
+let selectMode = false;
+let selected = new Set();
+let pendingId = null;
+let editingId = null;
+let editCat = null;
+let renamingTag = null;
+let pendingTagDel = null;
+let tagPanelOpen = false;
+const BUILTIN_CATS = ['travel','project','learning','health','other'];
+
+// ── Auth ──
+window.signIn = async () => {
+  const provider = new GoogleAuthProvider();
+  try { await signInWithPopup(auth, provider); } catch(e) { console.error(e); }
+};
+
+window.signOut = async () => {
+  if (unsubscribe) { unsubscribe(); unsubscribe = null; }
+  ideas = [];
+  await fbSignOut(auth);
+};
+
+onAuthStateChanged(auth, user => {
+  document.getElementById('loading-screen').style.display = 'none';
+  if (user) {
+    document.getElementById('auth-screen').style.display = 'none';
+    document.getElementById('app-screen').style.display = 'block';
+    startListening(user.uid);
+  } else {
+    document.getElementById('auth-screen').style.display = 'flex';
+    document.getElementById('app-screen').style.display = 'none';
+    if (unsubscribe) { unsubscribe(); unsubscribe = null; }
+    ideas = [];
+  }
+});
+
+// ── Firestore listener ──
+function startListening(uid) {
+  setSyncing(true);
+  const q = query(collection(db, 'users', uid, 'ideas'), orderBy('createdAt', 'desc'));
+  unsubscribe = onSnapshot(q, snapshot => {
+    ideas = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+    setSyncing(false);
+    render();
+  }, err => { console.error(err); setSyncing(false); });
+}
+
+function setSyncing(s) {
+  const dot = document.getElementById('sync-dot');
+  if (dot) dot.classList.toggle('syncing', s);
+}
+
+// ── CRUD ──
+async function firestoreAdd(data) {
+  setSyncing(true);
+  const uid = auth.currentUser.uid;
+  await addDoc(collection(db, 'users', uid, 'ideas'), { ...data, createdAt: serverTimestamp() });
+}
+
+async function firestoreUpdate(id, data) {
+  setSyncing(true);
+  const uid = auth.currentUser.uid;
+  await updateDoc(doc(db, 'users', uid, 'ideas', id), data);
+}
+
+async function firestoreDelete(id) {
+  setSyncing(true);
+  const uid = auth.currentUser.uid;
+  await deleteDoc(doc(db, 'users', uid, 'ideas', id));
+}
+
+// ── Add idea ──
+window.addIdea = async () => {
+  const title = document.getElementById('inp-title').value.trim();
+  if (!title) { document.getElementById('inp-title').focus(); return; }
+  const notes = document.getElementById('inp-notes').value.trim();
+  const custom = document.getElementById('inp-custom').value.trim();
+  const cat = custom || activeCat;
+  const date = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  await firestoreAdd({ title, notes, cat, date });
+  document.getElementById('inp-title').value = '';
+  document.getElementById('inp-notes').value = '';
+  document.getElementById('inp-notes').style.height = 'auto';
+  document.getElementById('inp-notes').classList.remove('has-title');
+  document.getElementById('inp-custom').value = '';
+  document.getElementById('inp-title').focus();
+};
+
+// ── Edit ──
+window.startEdit = (id) => {
+  const idea = ideas.find(i => i.id === id);
+  if (!idea) return;
+  editingId = id; editCat = idea.cat; pendingId = null; selectMode = false; selected.clear();
+  render();
+  setTimeout(() => {
+    const el = document.getElementById('edit-title-' + id);
+    if (el) { el.focus(); const l = el.value.length; el.setSelectionRange(l, l); }
+  }, 50);
+};
+
+window.setEditCat = (cat, id) => {
+  editCat = cat;
+  document.querySelectorAll(`.edit-pill[data-id="${id}"]`).forEach(b => b.classList.toggle('active', b.dataset.c === cat));
+  const ci = document.getElementById('edit-custom-' + id);
+  if (ci && !BUILTIN_CATS.includes(cat)) ci.value = cat; else if (ci) ci.value = '';
+};
+
+window.saveEdit = async (id) => {
+  const te = document.getElementById('edit-title-' + id);
+  const ne = document.getElementById('edit-notes-' + id);
+  const ce = document.getElementById('edit-custom-' + id);
+  const title = te ? te.value.trim() : '';
+  if (!title) return;
+  const notes = ne ? ne.value.trim() : '';
+  const custom = ce ? ce.value.trim() : '';
+  const cat = custom || editCat || 'other';
+  await firestoreUpdate(id, { title, notes, cat });
+  editingId = null; editCat = null;
+};
+
+window.cancelEdit = () => { editingId = null; editCat = null; render(); };
+
+// ── Remove ──
+window.askRemove = (id) => { pendingId = id; editingId = null; render(); };
+window.cancelRemove = () => { pendingId = null; render(); };
+window.confirmRemove = async () => {
+  const id = pendingId; pendingId = null;
+  await firestoreDelete(id);
+};
+
+// ── Select mode ──
+window.toggleSelectMode = () => {
+  selectMode = !selectMode; selected.clear(); editingId = null; pendingId = null;
+  document.getElementById('btn-select').classList.toggle('active-mode', selectMode);
+  render();
+};
+window.toggleCheck = (id) => {
+  if (selected.has(id)) selected.delete(id); else selected.add(id);
+  renderSelBar(); renderList();
+};
+window.selectAll = () => {
+  getVisible().forEach(i => selected.add(i.id));
+  renderSelBar(); renderList();
+};
+window.deselectAll = () => { selected.clear(); renderSelBar(); renderList(); };
+window.downloadSelected = () => {
+  const sel = ideas.filter(i => selected.has(i.id));
+  if (!sel.length) return;
+  const lines = sel.map(i => {
+    let t = i.title + ' [' + i.cat + '] — ' + i.date;
+    if (i.notes) t += '\n  ' + i.notes;
+    return t;
+  });
+  const text = 'Seed Garden — selected ideas\n' + '='.repeat(32) + '\n\n' + lines.join('\n\n');
+  const blob = new Blob([text], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'seedgarden-ideas.txt';
+  a.click();
+  selectMode = false; selected.clear();
+  document.getElementById('btn-select').classList.remove('active-mode');
+  render();
+};
+
+// ── Export backup ──
+window.exportData = () => {
+  const blob = new Blob([JSON.stringify(ideas, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'seedgarden-backup-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+};
+
+// ── Filter ──
+window.setFilter = (el, cat) => {
+  document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  activeFilter = cat;
+  render();
+};
+
+function getVisible() {
+  const q = document.getElementById('search') ? document.getElementById('search').value.trim().toLowerCase() : '';
+  let vis = activeFilter === 'all' ? ideas : ideas.filter(i => i.cat === activeFilter);
+  if (q) vis = vis.filter(i => i.title.toLowerCase().includes(q) || (i.notes||'').toLowerCase().includes(q));
+  return vis;
+}
+
+// ── Tag management ──
+window.toggleTagPanel = () => { tagPanelOpen = !tagPanelOpen; renamingTag = null; pendingTagDel = null; renderTagPanel(); };
+function getCats() { const c = {}; ideas.forEach(i => { c[i.cat] = (c[i.cat]||0)+1; }); return c; }
+window.startRename = (tag) => { renamingTag = tag; pendingTagDel = null; renderTagPanel(); setTimeout(() => { const el = document.getElementById('rename-inp'); if (el) { el.focus(); el.select(); } }, 50); };
+window.cancelRename = () => { renamingTag = null; renderTagPanel(); };
+window.saveRename = async (old) => {
+  const inp = document.getElementById('rename-inp');
+  const nw = inp ? inp.value.trim() : '';
+  if (!nw || nw === old) { renamingTag = null; renderTagPanel(); return; }
+  const uid = auth.currentUser.uid;
+  const toUpdate = ideas.filter(i => i.cat === old);
+  for (const idea of toUpdate) { await firestoreUpdate(idea.id, { cat: nw }); }
+  if (activeFilter === old) activeFilter = nw;
+  renamingTag = null;
+};
+window.askDeleteTag = (tag) => { pendingTagDel = tag; renamingTag = null; renderTagPanel(); };
+window.cancelDeleteTag = () => { pendingTagDel = null; renderTagPanel(); };
+window.confirmDeleteTag = async (tag, action) => {
+  const toAffect = ideas.filter(i => i.cat === tag);
+  if (action === 'delete') {
+    for (const idea of toAffect) { await firestoreDelete(idea.id); }
+  } else {
+    const s = document.getElementById('reassign-sel');
+    const to = s ? s.value : 'other';
+    for (const idea of toAffect) { await firestoreUpdate(idea.id, { cat: to }); }
+  }
+  if (activeFilter === tag) activeFilter = 'all';
+  pendingTagDel = null;
+};
+
+// ── Cat pill selection ──
+document.querySelectorAll('#cat-pills .cat-pill').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#cat-pills .cat-pill').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeCat = btn.dataset.cat;
+    document.getElementById('inp-custom').value = '';
+  });
+});
+
+const titleInput = document.getElementById('inp-title');
+const notesInput = document.getElementById('inp-notes');
+titleInput.addEventListener('input', () => { notesInput.classList.toggle('has-title', titleInput.value.length > 0); });
+titleInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); notesInput.focus(); } });
+notesInput.addEventListener('input', function() { this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px'; });
+
+// ── Escape key ──
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { cancelEdit(); cancelRemove(); } });
+
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
+
+// ── Render selection bar ──
+function renderSelBar() {
+  const container = document.getElementById('sel-bar-container');
+  if (!selectMode) { container.innerHTML = ''; return; }
+  const n = selected.size;
+  container.innerHTML = `<div class="sel-bar">
+    <span class="sel-bar-label">${n} selected</span>
+    <button class="btn-sel" onclick="selectAll()">select all</button>
+    <button class="btn-sel" onclick="deselectAll()">clear</button>
+    <button class="btn-dl" onclick="downloadSelected()" ${n===0?'disabled':''}>download .txt</button>
+    <button class="btn-sel" onclick="toggleSelectMode()">cancel</button>
+  </div>`;
+}
+
+// ── Render tag panel ──
+function renderTagPanel() {
+  const container = document.getElementById('tags-panel-container');
+  if (!tagPanelOpen) { container.innerHTML = ''; return; }
+  const counts = getCats(); const tags = Object.keys(counts);
+  if (!tags.length) {
+    container.innerHTML = `<div class="tags-panel"><div class="tags-panel-header"><span class="tags-panel-title">Manage tags</span><button class="btn-tag-action" onclick="toggleTagPanel()">close</button></div><p class="tags-panel-sub">No tags yet.</p></div>`;
+    return;
+  }
+  const rows = tags.map(tag => {
+    const count = counts[tag]; const otherTags = tags.filter(t => t !== tag);
+    if (pendingTagDel === tag) {
+      const opts = otherTags.map(t => `<option value="${esc(t)}">${esc(t)}</option>`).join('');
+      return `<div class="tag-row"><div style="flex:1;">
+        <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:6px;">Delete "<span style="font-family:var(--mono)">${esc(tag)}</span>"?</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">${count} idea${count===1?'':'s'} use this tag.</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+          ${otherTags.length ? `<button class="btn-tag-action" onclick="confirmDeleteTag('${esc(tag)}','reassign')">move to<select id="reassign-sel" class="reassign-select">${opts}</select></button>` : ''}
+          <button class="btn-confirm" style="font-size:12px;padding:5px 12px;" onclick="confirmDeleteTag('${esc(tag)}','delete')">delete all ${count}</button>
+          <button class="btn-cancel" style="font-size:12px;padding:5px 12px;" onclick="cancelDeleteTag()">cancel</button>
+        </div>
+      </div></div>`;
+    }
+    if (renamingTag === tag) {
+      return `<div class="tag-row">
+        <input class="tag-rename-inp" id="rename-inp" value="${esc(tag)}" onkeydown="if(event.key==='Enter')saveRename('${esc(tag)}');if(event.key==='Escape')cancelRename();" />
+        <span class="tag-count">${count} idea${count===1?'':'s'}</span>
+        <button class="btn-tag-save" onclick="saveRename('${esc(tag)}')">save</button>
+        <button class="btn-tag-action" onclick="cancelRename()">cancel</button>
+      </div>`;
+    }
+    return `<div class="tag-row">
+      <span class="tag-name">${esc(tag)}</span>
+      <span class="tag-count">${count} idea${count===1?'':'s'}</span>
+      <button class="btn-tag-action" onclick="startRename('${esc(tag)}')">rename</button>
+      <button class="btn-tag-del" onclick="askDeleteTag('${esc(tag)}')">delete</button>
+    </div>`;
+  }).join('');
+  container.innerHTML = `<div class="tags-panel">
+    <div class="tags-panel-header"><span class="tags-panel-title">Manage tags</span><button class="btn-tag-action" onclick="toggleTagPanel()">close</button></div>
+    <p class="tags-panel-sub">Rename or delete tags. Deleting moves ideas to another tag or removes them.</p>
+    ${rows}
+  </div>`;
+}
+
+// ── Render list ──
+function renderList() {
+  const vis = getVisible();
+  document.getElementById('idea-count').textContent = ideas.length + ' seed' + (ideas.length === 1 ? '' : 's');
+  const list = document.getElementById('ideas-list');
+  if (!vis.length) {
+    list.innerHTML = ideas.length === 0
+      ? `<div class="empty"><div class="empty-title">Your garden is empty</div><div class="empty-sub">Plant your first idea above.</div></div>`
+      : `<div class="empty"><div class="empty-sub">Nothing matches.</div></div>`;
+    return;
+  }
+  list.innerHTML = vis.map(idea => {
+    if (idea.id === pendingId) {
+      return `<div class="modal-wrap"><div class="modal">
+        <div class="modal-title">Remove this seed?</div>
+        <div class="modal-sub">This cannot be undone.</div>
+        <div class="modal-idea">${esc(idea.title)}</div>
+        <div class="modal-btns">
+          <button class="btn-cancel" onclick="cancelRemove()">keep it</button>
+          <button class="btn-confirm" onclick="confirmRemove()">yes, remove</button>
+        </div>
+      </div></div>`;
+    }
+    if (idea.id === editingId) {
+      const ec = editCat || idea.cat;
+      const isCustom = !BUILTIN_CATS.includes(ec);
+      const pills = BUILTIN_CATS.map(c => `<button class="edit-pill${ec===c?' active':''}" data-c="${c}" data-id="${idea.id}" onclick="setEditCat('${c}',${JSON.stringify(idea.id)})">${c}</button>`).join('');
+      return `<div class="card editing">
+        <div class="card-body">
+          <input class="edit-inp-title" id="edit-title-${idea.id}" value="${esc(idea.title)}" placeholder="Title..." onkeydown="if(event.key==='Escape')cancelEdit()" />
+          <textarea class="edit-inp-notes" id="edit-notes-${idea.id}" placeholder="Notes...">${esc(idea.notes||'')}</textarea>
+          <hr class="edit-div">
+          <div class="edit-bottom">
+            <div class="edit-pills">${pills}</div>
+            <input class="edit-custom" id="edit-custom-${idea.id}" placeholder="custom..." value="${isCustom?esc(ec):''}" oninput="if(this.value.trim())editCat=this.value.trim()" />
+            <button class="btn-cancel-edit" onclick="cancelEdit()">cancel</button>
+            <button class="btn-update" onclick="saveEdit(${JSON.stringify(idea.id)})">save</button>
+          </div>
+        </div>
+      </div>`;
+    }
+    const chk = selectMode ? `<input type="checkbox" class="card-check" ${selected.has(idea.id)?'checked':''} onchange="toggleCheck(${JSON.stringify(idea.id)})" />` : '';
+    const foot = selectMode
+      ? `<div class="card-foot"><span class="card-date">${idea.date||''}</span></div>`
+      : `<div class="card-foot"><span class="card-date">${idea.date||''}</span><button class="btn-edit" onclick="startEdit(${JSON.stringify(idea.id)})">edit</button><button class="btn-del" onclick="askRemove(${JSON.stringify(idea.id)})">remove</button></div>`;
+    return `<div class="card${selected.has(idea.id)?' selected':''}" ${selectMode?`onclick="toggleCheck(${JSON.stringify(idea.id)})"`:''} style="${selectMode?'cursor:pointer;':''}">
+      ${chk}
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-title">${esc(idea.title)}</div>
+          <span class="tag">${esc(idea.cat)}</span>
+        </div>
+        ${idea.notes?`<div class="card-notes">${esc(idea.notes)}</div>`:''}
+        ${foot}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Render dynamic filters ──
+function render() {
+  const cats = Object.keys(getCats());
+  document.getElementById('dynamic-filters').innerHTML = cats.map(c =>
+    `<button class="filter-pill${activeFilter===c?' active':''}" onclick="setFilter(this,'${esc(c)}')">${esc(c)}</button>`
+  ).join('');
+  document.getElementById('filter-all').classList.toggle('active', activeFilter === 'all');
+  renderSelBar();
+  renderTagPanel();
+  renderList();
+}
+
+// ── Service Worker ──
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+</script>
+</body>
+</html>
