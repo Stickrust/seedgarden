@@ -15,72 +15,25 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Lora:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #faf8f4;
-    --surface: #ffffff;
-    --border: #e5e2db;
-    --border-dark: #ccc9c1;
-    --text: #1a1917;
-    --muted: #9a9690;
-    --faint: #f0ede6;
-    --sans: 'DM Sans', sans-serif;
-    --mono: 'DM Mono', monospace;
-    --serif: 'Lora', Georgia, serif;
-    --safe-top: env(safe-area-inset-top, 0px);
-    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --bg: #faf8f4; --surface: #ffffff; --border: #e5e2db; --border-dark: #ccc9c1;
+    --text: #1a1917; --muted: #9a9690; --faint: #f0ede6;
+    --sans: 'DM Sans', sans-serif; --mono: 'DM Mono', monospace; --serif: 'Lora', Georgia, serif;
+    --safe-top: env(safe-area-inset-top, 0px); --safe-bottom: env(safe-area-inset-bottom, 0px);
     --max-w: 640px;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { height: 100%; }
-  body {
-    font-family: var(--sans);
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100%;
-    padding-bottom: calc(var(--safe-bottom) + 2rem);
-    -webkit-font-smoothing: antialiased;
-  }
-
-  /* ── Auth screen ── */
-  #auth-screen {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 2rem;
-    text-align: center;
-  }
+  body { font-family: var(--sans); background: var(--bg); color: var(--text); min-height: 100%; padding-bottom: calc(var(--safe-bottom) + 2rem); -webkit-font-smoothing: antialiased; }
+  #auth-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem; text-align: center; }
   .auth-title { font-family: var(--serif); font-size: 32px; font-weight: 400; color: var(--text); margin-bottom: 8px; letter-spacing: -0.02em; }
   .auth-sub { font-size: 14px; color: var(--muted); margin-bottom: 40px; }
-  .btn-google {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-family: var(--sans);
-    font-size: 14px;
-    font-weight: 500;
-    padding: 12px 24px;
-    border-radius: 10px;
-    border: 1px solid var(--border-dark);
-    background: var(--surface);
-    color: var(--text);
-    cursor: pointer;
-    transition: border-color 0.15s, opacity 0.15s;
-  }
+  .btn-google { display: flex; align-items: center; gap: 12px; font-family: var(--sans); font-size: 14px; font-weight: 500; padding: 12px 24px; border-radius: 10px; border: 1px solid var(--border-dark); background: var(--surface); color: var(--text); cursor: pointer; transition: border-color 0.15s; }
   .btn-google:hover { border-color: var(--text); }
   .btn-google svg { flex-shrink: 0; }
   .auth-note { font-family: var(--mono); font-size: 11px; color: var(--border-dark); margin-top: 20px; }
-
-  /* ── App shell ── */
   #app-screen { display: none; }
   .page { max-width: var(--max-w); margin: 0 auto; padding: 0 16px; }
-
-  /* ── Header ── */
-  .app-header {
-    padding: calc(var(--safe-top) + 20px) 16px 0;
-    max-width: var(--max-w);
-    margin: 0 auto 20px;
-  }
+  .app-header { padding: calc(var(--safe-top) + 20px) 16px 0; max-width: var(--max-w); margin: 0 auto 20px; }
   .header-top { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 4px; }
   .app-title { font-family: var(--serif); font-size: 24px; font-weight: 400; color: var(--text); letter-spacing: -0.01em; }
   .header-right { display: flex; align-items: center; gap: 12px; }
@@ -88,14 +41,7 @@
   .btn-signout { font-family: var(--mono); font-size: 11px; color: var(--muted); background: none; border: none; cursor: pointer; padding: 0; transition: color 0.15s; }
   .btn-signout:hover { color: var(--text); }
   .header-rule { border: none; border-top: 1px solid var(--border); margin-top: 14px; }
-
-  /* ── Loading state ── */
-  #loading-screen {
-    display: flex; align-items: center; justify-content: center;
-    min-height: 100vh; font-family: var(--mono); font-size: 12px; color: var(--muted);
-  }
-
-  /* ── Add form ── */
+  #loading-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: var(--mono); font-size: 12px; color: var(--muted); }
   .add-form { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 18px; }
   .add-form input[type="text"] { width: 100%; font-family: var(--sans); font-size: 15px; font-weight: 500; color: var(--text); background: transparent; border: none; outline: none; padding: 0; margin-bottom: 8px; display: block; }
   .add-form input[type="text"]::placeholder { color: var(--border-dark); font-weight: 400; }
@@ -104,16 +50,15 @@
   .add-form textarea.has-title { min-height: 44px; }
   .form-divider { border: none; border-top: 1px solid var(--border); margin: 10px 0; }
   .form-bottom { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-  .cat-pills { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; }
+  .cat-pills { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; align-items: center; }
   .cat-pill { font-family: var(--sans); font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
   .cat-pill.active { background: var(--text); color: var(--bg); border-color: var(--text); }
   .cat-pill:hover:not(.active) { border-color: var(--border-dark); color: var(--text); }
+  .recent-label { font-family: var(--mono); font-size: 10px; color: var(--border-dark); white-space: nowrap; }
   .custom-cat { font-family: var(--sans); font-size: 12px; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--text); outline: none; width: 110px; }
   .custom-cat::placeholder { color: var(--border-dark); }
   .btn-save { font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 7px 16px; border-radius: 8px; border: 1px solid var(--text); background: var(--text); color: var(--bg); cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: opacity 0.15s; }
   .btn-save:hover { opacity: 0.75; }
-
-  /* ── Toolbar ── */
   .toolbar { display: flex; align-items: center; gap: 7px; margin-bottom: 14px; flex-wrap: wrap; }
   .filter-pill { font-family: var(--sans); font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
   .filter-pill.active { background: var(--faint); color: var(--text); border-color: var(--border-dark); }
@@ -124,8 +69,6 @@
   .btn-sm { font-family: var(--sans); font-size: 12px; font-weight: 500; padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; white-space: nowrap; transition: all 0.15s; }
   .btn-sm:hover { border-color: var(--border-dark); color: var(--text); }
   .btn-sm.active-mode { border-color: var(--text); color: var(--text); }
-
-  /* ── Selection bar ── */
   .sel-bar { display: flex; align-items: center; gap: 8px; background: var(--faint); border: 1px solid var(--border-dark); border-radius: 10px; padding: 9px 14px; margin-bottom: 12px; flex-wrap: wrap; }
   .sel-bar-label { font-size: 13px; font-weight: 500; color: var(--text); flex: 1; }
   .btn-sel { font-family: var(--sans); font-size: 12px; font-weight: 500; padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border-dark); background: transparent; color: var(--muted); cursor: pointer; white-space: nowrap; transition: all 0.15s; }
@@ -133,8 +76,6 @@
   .btn-dl { font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 6px 16px; border-radius: 8px; border: 1px solid var(--text); background: var(--text); color: var(--bg); cursor: pointer; white-space: nowrap; transition: opacity 0.15s; }
   .btn-dl:hover { opacity: 0.75; }
   .btn-dl:disabled { opacity: 0.3; cursor: default; }
-
-  /* ── Cards ── */
   .ideas { display: flex; flex-direction: column; gap: 8px; }
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; transition: border-color 0.15s; display: flex; gap: 10px; align-items: flex-start; }
   .card:hover { border-color: var(--border-dark); }
@@ -152,13 +93,11 @@
   .btn-edit:hover { border-color: var(--border-dark); color: var(--text); }
   .btn-del { font-family: var(--sans); font-size: 13px; font-weight: 500; color: #c8c4bc; background: none; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; padding: 4px 10px; transition: color 0.15s, border-color 0.15s; }
   .btn-del:hover { color: #c0392b; border-color: #c0392b; }
-
-  /* ── Edit card ── */
   .edit-inp-title { width: 100%; font-family: var(--sans); font-size: 16px; font-weight: 500; color: var(--text); background: transparent; border: none; outline: none; padding: 0; margin-bottom: 6px; display: block; }
   .edit-inp-notes { width: 100%; font-family: var(--sans); font-size: 13px; color: var(--muted); background: transparent; border: none; outline: none; resize: none; padding: 0; line-height: 1.6; display: block; min-height: 40px; }
   .edit-div { border: none; border-top: 1px solid var(--border); margin: 10px 0; }
   .edit-bottom { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-  .edit-pills { display: flex; gap: 5px; flex-wrap: wrap; flex: 1; }
+  .edit-pills { display: flex; gap: 5px; flex-wrap: wrap; flex: 1; align-items: center; }
   .edit-pill { font-family: var(--sans); font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
   .edit-pill.active { background: var(--text); color: var(--bg); border-color: var(--text); }
   .edit-pill:hover:not(.active) { border-color: var(--border-dark); color: var(--text); }
@@ -168,8 +107,6 @@
   .btn-update:hover { opacity: 0.75; }
   .btn-cancel-edit { font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; transition: all 0.15s; }
   .btn-cancel-edit:hover { border-color: var(--border-dark); color: var(--text); }
-
-  /* ── Confirm modal ── */
   .modal-wrap { min-height: 220px; background: rgba(26,25,23,0.35); display: flex; align-items: center; justify-content: center; border-radius: 10px; margin-bottom: 8px; }
   .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 22px; width: 100%; max-width: 320px; }
   .modal-title { font-family: var(--serif); font-size: 17px; font-weight: 400; color: var(--text); margin-bottom: 6px; }
@@ -180,8 +117,6 @@
   .btn-cancel:hover { border-color: var(--border-dark); color: var(--text); }
   .btn-confirm { font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 8px 18px; border-radius: 8px; border: 1px solid #c0392b; background: #c0392b; color: #fff; cursor: pointer; transition: opacity 0.15s; }
   .btn-confirm:hover { opacity: 0.8; }
-
-  /* ── Tags panel ── */
   .tags-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 18px; }
   .tags-panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
   .tags-panel-title { font-size: 13px; font-weight: 500; color: var(--text); }
@@ -196,30 +131,19 @@
   .btn-tag-del:hover { border-color: #c0392b; color: #c0392b; }
   .btn-tag-save { font-family: var(--sans); font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--text); background: var(--text); color: var(--bg); cursor: pointer; white-space: nowrap; }
   .reassign-select { font-family: var(--sans); font-size: 12px; padding: 3px 8px; border-radius: 6px; border: 1px solid var(--border-dark); background: var(--bg); color: var(--text); outline: none; margin-left: 4px; }
-
-  /* ── Empty state ── */
   .empty { text-align: center; padding: 3rem 1rem; }
   .empty-title { font-family: var(--serif); font-size: 18px; font-weight: 400; color: var(--border-dark); margin-bottom: 8px; }
   .empty-sub { font-family: var(--mono); font-size: 12px; color: var(--border-dark); }
-
-  /* ── Sync status ── */
   .sync-dot { width: 6px; height: 6px; border-radius: 50%; background: #639922; display: inline-block; margin-right: 4px; }
   .sync-dot.syncing { background: #BA7517; animation: pulse 1s infinite; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-
-  /* ── Responsive ── */
-  @media (max-width: 480px) {
-    .app-title { font-size: 20px; }
-    .tb-right { margin-left: 0; width: 100%; }
-    .search-input { flex: 1; width: auto; }
-  }
+  @media (max-width: 480px) { .app-title { font-size: 20px; } .tb-right { margin-left: 0; width: 100%; } .search-input { flex: 1; width: auto; } }
 </style>
 </head>
 <body>
 
 <div id="loading-screen">loading...</div>
 
-<!-- Auth screen -->
 <div id="auth-screen" style="display:none;">
   <div class="auth-title">Seed Garden</div>
   <div class="auth-sub">Your personal idea journal</div>
@@ -230,7 +154,6 @@
   <div class="auth-note">Only you can access your garden</div>
 </div>
 
-<!-- App screen -->
 <div id="app-screen">
   <div class="app-header">
     <div class="header-top">
@@ -242,25 +165,17 @@
     </div>
     <hr class="header-rule">
   </div>
-
   <div class="page">
     <div class="add-form">
       <input type="text" id="inp-title" placeholder="Plant a new idea..." autocomplete="off" />
       <textarea id="inp-notes" placeholder="Notes, links, thoughts..." rows="1"></textarea>
       <hr class="form-divider">
       <div class="form-bottom">
-        <div class="cat-pills" id="cat-pills">
-          <button class="cat-pill active" data-cat="travel">travel</button>
-          <button class="cat-pill" data-cat="project">project</button>
-          <button class="cat-pill" data-cat="learning">learning</button>
-          <button class="cat-pill" data-cat="health">health</button>
-          <button class="cat-pill" data-cat="other">other</button>
-        </div>
+        <div class="cat-pills" id="cat-pills"></div>
         <input class="custom-cat" id="inp-custom" placeholder="custom..." />
         <button class="btn-save" onclick="addIdea()">plant it</button>
       </div>
     </div>
-
     <div class="toolbar">
       <button class="filter-pill active" id="filter-all" onclick="setFilter(this,'all')">all</button>
       <div id="dynamic-filters" style="display:contents;"></div>
@@ -271,7 +186,6 @@
         <button class="btn-sm" onclick="exportData()">backup ↓</button>
       </div>
     </div>
-
     <div id="sel-bar-container"></div>
     <div id="tags-panel-container"></div>
     <div class="ideas" id="ideas-list"></div>
@@ -296,31 +210,39 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-let ideas = [];
-let unsubscribe = null;
-let activeFilter = 'all';
-let activeCat = 'travel';
-let selectMode = false;
-let selected = new Set();
-let pendingId = null;
-let editingId = null;
-let editCat = null;
-let renamingTag = null;
-let pendingTagDel = null;
-let tagPanelOpen = false;
-const BUILTIN_CATS = ['travel','project','learning','health','other'];
+let ideas = [], unsubscribe = null, activeFilter = 'all', activeCat = null;
+let selectMode = false, selected = new Set(), pendingId = null, editingId = null, editCat = null;
+let renamingTag = null, pendingTagDel = null, tagPanelOpen = false;
 
-// ── Auth ──
-window.signIn = async () => {
-  const provider = new GoogleAuthProvider();
-  try { await signInWithPopup(auth, provider); } catch(e) { console.error(e); }
-};
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
 
-window.signOut = async () => {
-  if (unsubscribe) { unsubscribe(); unsubscribe = null; }
-  ideas = [];
-  await fbSignOut(auth);
-};
+function getRecentCats() {
+  const seen = [], result = [];
+  for (const idea of [...ideas].reverse()) {
+    if (!seen.includes(idea.cat)) { seen.push(idea.cat); result.push(idea.cat); }
+    if (result.length === 2) break;
+  }
+  return result;
+}
+
+function renderCatPills() {
+  const recent = getRecentCats();
+  if (!activeCat) activeCat = recent[0] || 'other';
+  const container = document.getElementById('cat-pills');
+  if (!container) return;
+  if (!recent.length) {
+    container.innerHTML = `<span style="font-family:var(--mono);font-size:11px;color:var(--border-dark);">type a category below</span>`;
+    return;
+  }
+  container.innerHTML = recent.map(c =>
+    `<button class="cat-pill${activeCat===c?' active':''}" onclick="selectAddCat('${esc(c)}')">${esc(c)}</button>`
+  ).join('') + `<span class="recent-label">recent</span>`;
+}
+
+window.selectAddCat = (cat) => { activeCat = cat; renderCatPills(); document.getElementById('inp-custom').value = ''; };
+
+window.signIn = async () => { try { await signInWithPopup(auth, new GoogleAuthProvider()); } catch(e) { console.error(e); } };
+window.signOut = async () => { if (unsubscribe) { unsubscribe(); unsubscribe = null; } ideas = []; await fbSignOut(auth); };
 
 onAuthStateChanged(auth, user => {
   document.getElementById('loading-screen').style.display = 'none';
@@ -336,343 +258,168 @@ onAuthStateChanged(auth, user => {
   }
 });
 
-// ── Firestore listener ──
 function startListening(uid) {
   setSyncing(true);
   const q = query(collection(db, 'users', uid, 'ideas'), orderBy('createdAt', 'desc'));
-  unsubscribe = onSnapshot(q, snapshot => {
-    ideas = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-    setSyncing(false);
-    render();
-  }, err => { console.error(err); setSyncing(false); });
+  unsubscribe = onSnapshot(q, snap => { ideas = snap.docs.map(d => ({ id: d.id, ...d.data() })); setSyncing(false); render(); }, err => { console.error(err); setSyncing(false); });
 }
 
-function setSyncing(s) {
-  const dot = document.getElementById('sync-dot');
-  if (dot) dot.classList.toggle('syncing', s);
-}
+function setSyncing(s) { const d = document.getElementById('sync-dot'); if (d) d.classList.toggle('syncing', s); }
 
-// ── CRUD ──
-async function firestoreAdd(data) {
-  setSyncing(true);
-  const uid = auth.currentUser.uid;
-  await addDoc(collection(db, 'users', uid, 'ideas'), { ...data, createdAt: serverTimestamp() });
-}
+async function firestoreAdd(data) { setSyncing(true); await addDoc(collection(db, 'users', auth.currentUser.uid, 'ideas'), { ...data, createdAt: serverTimestamp() }); }
+async function firestoreUpdate(id, data) { setSyncing(true); await updateDoc(doc(db, 'users', auth.currentUser.uid, 'ideas', id), data); }
+async function firestoreDelete(id) { setSyncing(true); await deleteDoc(doc(db, 'users', auth.currentUser.uid, 'ideas', id)); }
 
-async function firestoreUpdate(id, data) {
-  setSyncing(true);
-  const uid = auth.currentUser.uid;
-  await updateDoc(doc(db, 'users', uid, 'ideas', id), data);
-}
-
-async function firestoreDelete(id) {
-  setSyncing(true);
-  const uid = auth.currentUser.uid;
-  await deleteDoc(doc(db, 'users', uid, 'ideas', id));
-}
-
-// ── Add idea ──
 window.addIdea = async () => {
-  const title = document.getElementById('inp-title').value.trim();
-  if (!title) { document.getElementById('inp-title').focus(); return; }
+  const title = document.getElementById('inp-title').value.trim(); if (!title) { document.getElementById('inp-title').focus(); return; }
   const notes = document.getElementById('inp-notes').value.trim();
   const custom = document.getElementById('inp-custom').value.trim();
-  const cat = custom || activeCat;
-  const date = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-  await firestoreAdd({ title, notes, cat, date });
+  const cat = custom || activeCat || 'other';
+  await firestoreAdd({ title, notes, cat, date: new Date().toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) });
   document.getElementById('inp-title').value = '';
   document.getElementById('inp-notes').value = '';
   document.getElementById('inp-notes').style.height = 'auto';
   document.getElementById('inp-notes').classList.remove('has-title');
   document.getElementById('inp-custom').value = '';
+  activeCat = null;
   document.getElementById('inp-title').focus();
 };
 
-// ── Edit ──
+// ── Edit — IDs always treated as strings ──
 window.startEdit = (id) => {
   const idea = ideas.find(i => i.id === id);
   if (!idea) return;
   editingId = id; editCat = idea.cat; pendingId = null; selectMode = false; selected.clear();
   render();
-  setTimeout(() => {
-    const el = document.getElementById('edit-title-' + id);
-    if (el) { el.focus(); const l = el.value.length; el.setSelectionRange(l, l); }
-  }, 50);
+  setTimeout(() => { const el = document.getElementById('edit-title-' + id); if (el) { el.focus(); const l = el.value.length; el.setSelectionRange(l, l); } }, 50);
 };
 
-window.setEditCat = (cat, id) => {
+window.setEditCat = (cat) => {
   editCat = cat;
-  document.querySelectorAll(`.edit-pill[data-id="${id}"]`).forEach(b => b.classList.toggle('active', b.dataset.c === cat));
-  const ci = document.getElementById('edit-custom-' + id);
-  if (ci && !BUILTIN_CATS.includes(cat)) ci.value = cat; else if (ci) ci.value = '';
+  document.querySelectorAll('.edit-pill').forEach(b => b.classList.toggle('active', b.dataset.c === cat));
+  const ce = document.getElementById('edit-custom-field'); if (ce) ce.value = '';
 };
 
 window.saveEdit = async (id) => {
-  const te = document.getElementById('edit-title-' + id);
-  const ne = document.getElementById('edit-notes-' + id);
-  const ce = document.getElementById('edit-custom-' + id);
-  const title = te ? te.value.trim() : '';
-  if (!title) return;
-  const notes = ne ? ne.value.trim() : '';
-  const custom = ce ? ce.value.trim() : '';
-  const cat = custom || editCat || 'other';
-  await firestoreUpdate(id, { title, notes, cat });
+  const title = document.getElementById('edit-title-' + id)?.value.trim(); if (!title) return;
+  const notes = document.getElementById('edit-notes-' + id)?.value.trim() || '';
+  const custom = document.getElementById('edit-custom-field')?.value.trim() || '';
+  await firestoreUpdate(id, { title, notes, cat: custom || editCat || 'other' });
   editingId = null; editCat = null;
 };
 
 window.cancelEdit = () => { editingId = null; editCat = null; render(); };
-
-// ── Remove ──
 window.askRemove = (id) => { pendingId = id; editingId = null; render(); };
 window.cancelRemove = () => { pendingId = null; render(); };
-window.confirmRemove = async () => {
-  const id = pendingId; pendingId = null;
-  await firestoreDelete(id);
-};
+window.confirmRemove = async () => { const id = pendingId; pendingId = null; await firestoreDelete(id); };
 
-// ── Select mode ──
 window.toggleSelectMode = () => {
   selectMode = !selectMode; selected.clear(); editingId = null; pendingId = null;
-  document.getElementById('btn-select').classList.toggle('active-mode', selectMode);
-  render();
+  document.getElementById('btn-select').classList.toggle('active-mode', selectMode); render();
 };
-window.toggleCheck = (id) => {
-  if (selected.has(id)) selected.delete(id); else selected.add(id);
-  renderSelBar(); renderList();
-};
-window.selectAll = () => {
-  getVisible().forEach(i => selected.add(i.id));
-  renderSelBar(); renderList();
-};
+window.toggleCheck = (id) => { if (selected.has(id)) selected.delete(id); else selected.add(id); renderSelBar(); renderList(); };
+window.selectAll = () => { getVisible().forEach(i => selected.add(i.id)); renderSelBar(); renderList(); };
 window.deselectAll = () => { selected.clear(); renderSelBar(); renderList(); };
 window.downloadSelected = () => {
-  const sel = ideas.filter(i => selected.has(i.id));
-  if (!sel.length) return;
-  const lines = sel.map(i => {
-    let t = i.title + ' [' + i.cat + '] — ' + i.date;
-    if (i.notes) t += '\n  ' + i.notes;
-    return t;
-  });
-  const text = 'Seed Garden — selected ideas\n' + '='.repeat(32) + '\n\n' + lines.join('\n\n');
-  const blob = new Blob([text], { type: 'text/plain' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'seedgarden-ideas.txt';
-  a.click();
-  selectMode = false; selected.clear();
-  document.getElementById('btn-select').classList.remove('active-mode');
-  render();
+  const sel = ideas.filter(i => selected.has(i.id)); if (!sel.length) return;
+  const text = 'Seed Garden — selected ideas\n' + '='.repeat(32) + '\n\n' + sel.map(i => i.title + ' [' + i.cat + '] — ' + i.date + (i.notes ? '\n  ' + i.notes : '')).join('\n\n');
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], {type:'text/plain'})); a.download = 'seedgarden-ideas.txt'; a.click();
+  selectMode = false; selected.clear(); document.getElementById('btn-select').classList.remove('active-mode'); render();
 };
 
-// ── Export backup ──
 window.exportData = () => {
-  const blob = new Blob([JSON.stringify(ideas, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'seedgarden-backup-' + new Date().toISOString().slice(0,10) + '.json';
-  a.click();
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(ideas,null,2)],{type:'application/json'}));
+  a.download = 'seedgarden-backup-' + new Date().toISOString().slice(0,10) + '.json'; a.click();
 };
 
-// ── Filter ──
-window.setFilter = (el, cat) => {
-  document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-  el.classList.add('active');
-  activeFilter = cat;
-  render();
-};
+window.setFilter = (el, cat) => { document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active')); el.classList.add('active'); activeFilter = cat; render(); };
 
 function getVisible() {
-  const q = document.getElementById('search') ? document.getElementById('search').value.trim().toLowerCase() : '';
+  const q = document.getElementById('search')?.value.trim().toLowerCase() || '';
   let vis = activeFilter === 'all' ? ideas : ideas.filter(i => i.cat === activeFilter);
   if (q) vis = vis.filter(i => i.title.toLowerCase().includes(q) || (i.notes||'').toLowerCase().includes(q));
   return vis;
 }
 
-// ── Tag management ──
 window.toggleTagPanel = () => { tagPanelOpen = !tagPanelOpen; renamingTag = null; pendingTagDel = null; renderTagPanel(); };
 function getCats() { const c = {}; ideas.forEach(i => { c[i.cat] = (c[i.cat]||0)+1; }); return c; }
 window.startRename = (tag) => { renamingTag = tag; pendingTagDel = null; renderTagPanel(); setTimeout(() => { const el = document.getElementById('rename-inp'); if (el) { el.focus(); el.select(); } }, 50); };
 window.cancelRename = () => { renamingTag = null; renderTagPanel(); };
 window.saveRename = async (old) => {
-  const inp = document.getElementById('rename-inp');
-  const nw = inp ? inp.value.trim() : '';
-  if (!nw || nw === old) { renamingTag = null; renderTagPanel(); return; }
-  const uid = auth.currentUser.uid;
-  const toUpdate = ideas.filter(i => i.cat === old);
-  for (const idea of toUpdate) { await firestoreUpdate(idea.id, { cat: nw }); }
-  if (activeFilter === old) activeFilter = nw;
-  renamingTag = null;
+  const nw = document.getElementById('rename-inp')?.value.trim(); if (!nw || nw === old) { renamingTag = null; renderTagPanel(); return; }
+  for (const idea of ideas.filter(i => i.cat === old)) { await firestoreUpdate(idea.id, { cat: nw }); }
+  if (activeFilter === old) activeFilter = nw; renamingTag = null;
 };
 window.askDeleteTag = (tag) => { pendingTagDel = tag; renamingTag = null; renderTagPanel(); };
 window.cancelDeleteTag = () => { pendingTagDel = null; renderTagPanel(); };
 window.confirmDeleteTag = async (tag, action) => {
   const toAffect = ideas.filter(i => i.cat === tag);
-  if (action === 'delete') {
-    for (const idea of toAffect) { await firestoreDelete(idea.id); }
-  } else {
-    const s = document.getElementById('reassign-sel');
-    const to = s ? s.value : 'other';
-    for (const idea of toAffect) { await firestoreUpdate(idea.id, { cat: to }); }
-  }
-  if (activeFilter === tag) activeFilter = 'all';
-  pendingTagDel = null;
+  if (action === 'delete') { for (const idea of toAffect) await firestoreDelete(idea.id); }
+  else { const to = document.getElementById('reassign-sel')?.value || 'other'; for (const idea of toAffect) await firestoreUpdate(idea.id, { cat: to }); }
+  if (activeFilter === tag) activeFilter = 'all'; pendingTagDel = null;
 };
-
-// ── Cat pill selection ──
-document.querySelectorAll('#cat-pills .cat-pill').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('#cat-pills .cat-pill').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    activeCat = btn.dataset.cat;
-    document.getElementById('inp-custom').value = '';
-  });
-});
 
 const titleInput = document.getElementById('inp-title');
 const notesInput = document.getElementById('inp-notes');
-titleInput.addEventListener('input', () => { notesInput.classList.toggle('has-title', titleInput.value.length > 0); });
+titleInput.addEventListener('input', () => notesInput.classList.toggle('has-title', titleInput.value.length > 0));
 titleInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); notesInput.focus(); } });
 notesInput.addEventListener('input', function() { this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px'; });
-
-// ── Escape key ──
+document.getElementById('inp-custom').addEventListener('input', function() { if (this.value.trim()) { activeCat = this.value.trim(); renderCatPills(); } });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') { cancelEdit(); cancelRemove(); } });
 
-function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
-
-// ── Render selection bar ──
 function renderSelBar() {
   const container = document.getElementById('sel-bar-container');
   if (!selectMode) { container.innerHTML = ''; return; }
   const n = selected.size;
-  container.innerHTML = `<div class="sel-bar">
-    <span class="sel-bar-label">${n} selected</span>
-    <button class="btn-sel" onclick="selectAll()">select all</button>
-    <button class="btn-sel" onclick="deselectAll()">clear</button>
-    <button class="btn-dl" onclick="downloadSelected()" ${n===0?'disabled':''}>download .txt</button>
-    <button class="btn-sel" onclick="toggleSelectMode()">cancel</button>
-  </div>`;
+  container.innerHTML = `<div class="sel-bar"><span class="sel-bar-label">${n} selected</span><button class="btn-sel" onclick="selectAll()">select all</button><button class="btn-sel" onclick="deselectAll()">clear</button><button class="btn-dl" onclick="downloadSelected()" ${n===0?'disabled':''}>download .txt</button><button class="btn-sel" onclick="toggleSelectMode()">cancel</button></div>`;
 }
 
-// ── Render tag panel ──
 function renderTagPanel() {
   const container = document.getElementById('tags-panel-container');
   if (!tagPanelOpen) { container.innerHTML = ''; return; }
-  const counts = getCats(); const tags = Object.keys(counts);
-  if (!tags.length) {
-    container.innerHTML = `<div class="tags-panel"><div class="tags-panel-header"><span class="tags-panel-title">Manage tags</span><button class="btn-tag-action" onclick="toggleTagPanel()">close</button></div><p class="tags-panel-sub">No tags yet.</p></div>`;
-    return;
-  }
+  const counts = getCats(), tags = Object.keys(counts);
+  if (!tags.length) { container.innerHTML = `<div class="tags-panel"><div class="tags-panel-header"><span class="tags-panel-title">Manage tags</span><button class="btn-tag-action" onclick="toggleTagPanel()">close</button></div><p class="tags-panel-sub">No tags yet.</p></div>`; return; }
   const rows = tags.map(tag => {
-    const count = counts[tag]; const otherTags = tags.filter(t => t !== tag);
+    const count = counts[tag], otherTags = tags.filter(t => t !== tag);
     if (pendingTagDel === tag) {
       const opts = otherTags.map(t => `<option value="${esc(t)}">${esc(t)}</option>`).join('');
-      return `<div class="tag-row"><div style="flex:1;">
-        <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:6px;">Delete "<span style="font-family:var(--mono)">${esc(tag)}</span>"?</div>
-        <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">${count} idea${count===1?'':'s'} use this tag.</div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
-          ${otherTags.length ? `<button class="btn-tag-action" onclick="confirmDeleteTag('${esc(tag)}','reassign')">move to<select id="reassign-sel" class="reassign-select">${opts}</select></button>` : ''}
-          <button class="btn-confirm" style="font-size:12px;padding:5px 12px;" onclick="confirmDeleteTag('${esc(tag)}','delete')">delete all ${count}</button>
-          <button class="btn-cancel" style="font-size:12px;padding:5px 12px;" onclick="cancelDeleteTag()">cancel</button>
-        </div>
-      </div></div>`;
+      return `<div class="tag-row"><div style="flex:1;"><div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:6px;">Delete "<span style="font-family:var(--mono)">${esc(tag)}</span>"?</div><div style="font-size:12px;color:var(--muted);margin-bottom:8px;">${count} idea${count===1?'':'s'} use this tag.</div><div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">${otherTags.length?`<button class="btn-tag-action" onclick="confirmDeleteTag('${esc(tag)}','reassign')">move to<select id="reassign-sel" class="reassign-select">${opts}</select></button>`:''}<button class="btn-confirm" style="font-size:12px;padding:5px 12px;" onclick="confirmDeleteTag('${esc(tag)}','delete')">delete all ${count}</button><button class="btn-cancel" style="font-size:12px;padding:5px 12px;" onclick="cancelDeleteTag()">cancel</button></div></div></div>`;
     }
     if (renamingTag === tag) {
-      return `<div class="tag-row">
-        <input class="tag-rename-inp" id="rename-inp" value="${esc(tag)}" onkeydown="if(event.key==='Enter')saveRename('${esc(tag)}');if(event.key==='Escape')cancelRename();" />
-        <span class="tag-count">${count} idea${count===1?'':'s'}</span>
-        <button class="btn-tag-save" onclick="saveRename('${esc(tag)}')">save</button>
-        <button class="btn-tag-action" onclick="cancelRename()">cancel</button>
-      </div>`;
+      return `<div class="tag-row"><input class="tag-rename-inp" id="rename-inp" value="${esc(tag)}" onkeydown="if(event.key==='Enter')saveRename('${esc(tag)}');if(event.key==='Escape')cancelRename();"/><span class="tag-count">${count} idea${count===1?'':'s'}</span><button class="btn-tag-save" onclick="saveRename('${esc(tag)}')">save</button><button class="btn-tag-action" onclick="cancelRename()">cancel</button></div>`;
     }
-    return `<div class="tag-row">
-      <span class="tag-name">${esc(tag)}</span>
-      <span class="tag-count">${count} idea${count===1?'':'s'}</span>
-      <button class="btn-tag-action" onclick="startRename('${esc(tag)}')">rename</button>
-      <button class="btn-tag-del" onclick="askDeleteTag('${esc(tag)}')">delete</button>
-    </div>`;
+    return `<div class="tag-row"><span class="tag-name">${esc(tag)}</span><span class="tag-count">${count} idea${count===1?'':'s'}</span><button class="btn-tag-action" onclick="startRename('${esc(tag)}')">rename</button><button class="btn-tag-del" onclick="askDeleteTag('${esc(tag)}')">delete</button></div>`;
   }).join('');
-  container.innerHTML = `<div class="tags-panel">
-    <div class="tags-panel-header"><span class="tags-panel-title">Manage tags</span><button class="btn-tag-action" onclick="toggleTagPanel()">close</button></div>
-    <p class="tags-panel-sub">Rename or delete tags. Deleting moves ideas to another tag or removes them.</p>
-    ${rows}
-  </div>`;
+  container.innerHTML = `<div class="tags-panel"><div class="tags-panel-header"><span class="tags-panel-title">Manage tags</span><button class="btn-tag-action" onclick="toggleTagPanel()">close</button></div><p class="tags-panel-sub">Rename or delete tags. Deleting moves ideas to another tag or removes them.</p>${rows}</div>`;
 }
 
-// ── Render list ──
 function renderList() {
   const vis = getVisible();
-  document.getElementById('idea-count').textContent = ideas.length + ' seed' + (ideas.length === 1 ? '' : 's');
+  document.getElementById('idea-count').textContent = ideas.length + ' seed' + (ideas.length===1?'':'s');
   const list = document.getElementById('ideas-list');
-  if (!vis.length) {
-    list.innerHTML = ideas.length === 0
-      ? `<div class="empty"><div class="empty-title">Your garden is empty</div><div class="empty-sub">Plant your first idea above.</div></div>`
-      : `<div class="empty"><div class="empty-sub">Nothing matches.</div></div>`;
-    return;
-  }
+  if (!vis.length) { list.innerHTML = ideas.length===0 ? `<div class="empty"><div class="empty-title">Your garden is empty</div><div class="empty-sub">Plant your first idea above.</div></div>` : `<div class="empty"><div class="empty-sub">Nothing matches.</div></div>`; return; }
   list.innerHTML = vis.map(idea => {
-    if (idea.id === pendingId) {
-      return `<div class="modal-wrap"><div class="modal">
-        <div class="modal-title">Remove this seed?</div>
-        <div class="modal-sub">This cannot be undone.</div>
-        <div class="modal-idea">${esc(idea.title)}</div>
-        <div class="modal-btns">
-          <button class="btn-cancel" onclick="cancelRemove()">keep it</button>
-          <button class="btn-confirm" onclick="confirmRemove()">yes, remove</button>
-        </div>
-      </div></div>`;
-    }
+    if (idea.id === pendingId) return `<div class="modal-wrap"><div class="modal"><div class="modal-title">Remove this seed?</div><div class="modal-sub">This cannot be undone.</div><div class="modal-idea">${esc(idea.title)}</div><div class="modal-btns"><button class="btn-cancel" onclick="cancelRemove()">keep it</button><button class="btn-confirm" onclick="confirmRemove()">yes, remove</button></div></div></div>`;
     if (idea.id === editingId) {
       const ec = editCat || idea.cat;
-      const isCustom = !BUILTIN_CATS.includes(ec);
-      const pills = BUILTIN_CATS.map(c => `<button class="edit-pill${ec===c?' active':''}" data-c="${c}" data-id="${idea.id}" onclick="setEditCat('${c}',${JSON.stringify(idea.id)})">${c}</button>`).join('');
-      return `<div class="card editing">
-        <div class="card-body">
-          <input class="edit-inp-title" id="edit-title-${idea.id}" value="${esc(idea.title)}" placeholder="Title..." onkeydown="if(event.key==='Escape')cancelEdit()" />
-          <textarea class="edit-inp-notes" id="edit-notes-${idea.id}" placeholder="Notes...">${esc(idea.notes||'')}</textarea>
-          <hr class="edit-div">
-          <div class="edit-bottom">
-            <div class="edit-pills">${pills}</div>
-            <input class="edit-custom" id="edit-custom-${idea.id}" placeholder="custom..." value="${isCustom?esc(ec):''}" oninput="if(this.value.trim())editCat=this.value.trim()" />
-            <button class="btn-cancel-edit" onclick="cancelEdit()">cancel</button>
-            <button class="btn-update" onclick="saveEdit(${JSON.stringify(idea.id)})">save</button>
-          </div>
-        </div>
-      </div>`;
+      const allCats = [...new Set([...getRecentCats(), idea.cat, ec])];
+      const pills = allCats.map(c => `<button class="edit-pill${ec===c?' active':''}" data-c="${esc(c)}" onclick="setEditCat('${esc(c)}')">${esc(c)}</button>`).join('');
+      return `<div class="card editing"><div class="card-body"><input class="edit-inp-title" id="edit-title-${esc(idea.id)}" value="${esc(idea.title)}" placeholder="Title..."/><textarea class="edit-inp-notes" id="edit-notes-${esc(idea.id)}" placeholder="Notes...">${esc(idea.notes||'')}</textarea><hr class="edit-div"><div class="edit-bottom"><div class="edit-pills">${pills}</div><input class="edit-custom" id="edit-custom-field" placeholder="custom..." oninput="if(this.value.trim())editCat=this.value.trim()"/><button class="btn-cancel-edit" onclick="cancelEdit()">cancel</button><button class="btn-update" onclick="saveEdit('${esc(idea.id)}')">save</button></div></div></div>`;
     }
-    const chk = selectMode ? `<input type="checkbox" class="card-check" ${selected.has(idea.id)?'checked':''} onchange="toggleCheck(${JSON.stringify(idea.id)})" />` : '';
-    const foot = selectMode
-      ? `<div class="card-foot"><span class="card-date">${idea.date||''}</span></div>`
-      : `<div class="card-foot"><span class="card-date">${idea.date||''}</span><button class="btn-edit" onclick="startEdit(${JSON.stringify(idea.id)})">edit</button><button class="btn-del" onclick="askRemove(${JSON.stringify(idea.id)})">remove</button></div>`;
-    return `<div class="card${selected.has(idea.id)?' selected':''}" ${selectMode?`onclick="toggleCheck(${JSON.stringify(idea.id)})"`:''} style="${selectMode?'cursor:pointer;':''}">
-      ${chk}
-      <div class="card-body">
-        <div class="card-top">
-          <div class="card-title">${esc(idea.title)}</div>
-          <span class="tag">${esc(idea.cat)}</span>
-        </div>
-        ${idea.notes?`<div class="card-notes">${esc(idea.notes)}</div>`:''}
-        ${foot}
-      </div>
-    </div>`;
+    const chk = selectMode ? `<input type="checkbox" class="card-check" ${selected.has(idea.id)?'checked':''} onchange="toggleCheck('${esc(idea.id)}')"/>` : '';
+    const foot = selectMode ? `<div class="card-foot"><span class="card-date">${idea.date||''}</span></div>` : `<div class="card-foot"><span class="card-date">${idea.date||''}</span><button class="btn-edit" onclick="startEdit('${esc(idea.id)}')">edit</button><button class="btn-del" onclick="askRemove('${esc(idea.id)}')">remove</button></div>`;
+    return `<div class="card${selected.has(idea.id)?' selected':''}" ${selectMode?`onclick="toggleCheck('${esc(idea.id)}')"`:''} style="${selectMode?'cursor:pointer;':''}">${chk}<div class="card-body"><div class="card-top"><div class="card-title">${esc(idea.title)}</div><span class="tag">${esc(idea.cat)}</span></div>${idea.notes?`<div class="card-notes">${esc(idea.notes)}</div>`:''}${foot}</div></div>`;
   }).join('');
 }
 
-// ── Render dynamic filters ──
 function render() {
   const cats = Object.keys(getCats());
-  document.getElementById('dynamic-filters').innerHTML = cats.map(c =>
-    `<button class="filter-pill${activeFilter===c?' active':''}" onclick="setFilter(this,'${esc(c)}')">${esc(c)}</button>`
-  ).join('');
-  document.getElementById('filter-all').classList.toggle('active', activeFilter === 'all');
-  renderSelBar();
-  renderTagPanel();
-  renderList();
+  document.getElementById('dynamic-filters').innerHTML = cats.map(c => `<button class="filter-pill${activeFilter===c?' active':''}" onclick="setFilter(this,'${esc(c)}')">${esc(c)}</button>`).join('');
+  document.getElementById('filter-all').classList.toggle('active', activeFilter==='all');
+  renderCatPills(); renderSelBar(); renderTagPanel(); renderList();
 }
 
-// ── Service Worker ──
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(() => {});
-}
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
 </body>
 </html>
